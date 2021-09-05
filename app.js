@@ -8,37 +8,33 @@ function startGame()  {
             music.play()
             gameAlreadyStarted = true
             const scoreDisplay = document.getElementById('score')
-            const width = 28
+            const width = 21
             let score = 0
+            let dotsEaten = 0
             const grid = document.querySelector('.grid')
             const layout = [
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,3,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,3,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,
-            1,1,1,1,1,1,0,1,1,4,4,4,4,4,4,4,4,4,4,1,1,0,1,1,1,1,1,1,
-            1,1,1,1,1,1,0,1,1,4,1,1,1,2,2,1,1,1,4,1,1,0,1,1,1,1,1,1,
-            1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
-            4,4,4,4,4,4,0,0,0,4,1,2,2,2,2,2,2,1,4,0,0,0,4,4,4,4,4,4,
-            1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
-            1,1,1,1,1,1,0,1,1,4,1,1,1,1,1,1,1,1,4,1,1,0,1,1,1,1,1,1,
-            1,1,1,1,1,1,0,1,1,4,1,1,1,1,1,1,1,1,4,1,1,0,1,1,1,1,1,1,
-            1,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,1,1,1,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-            1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-            1,3,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,3,1,
-            1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1,
-            1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1,
-            1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1,
-            1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,
-            1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+                4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,
+                4,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,4,
+                4,1,3,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,3,1,4,
+                4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,
+                4,1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1,4,
+                4,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,4,
+                4,1,1,1,1,0,1,1,1,4,1,4,1,1,1,0,1,1,1,1,4,
+                4,4,4,4,1,0,1,4,4,4,4,4,4,4,1,0,1,4,4,4,4,
+                1,1,1,1,1,0,1,4,1,1,2,1,1,4,1,0,1,1,1,1,1,
+                4,4,4,4,4,0,4,4,1,4,2,4,1,4,4,0,4,4,4,4,4,
+                1,1,1,1,1,0,1,4,1,1,1,1,1,4,1,0,1,1,1,1,1,
+                4,4,4,4,1,0,1,4,4,4,4,4,4,4,1,0,1,4,4,4,4,
+                4,1,1,1,1,0,1,4,1,1,1,1,1,4,1,0,1,1,1,1,4,
+                4,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,4,
+                4,1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1,4,
+                4,1,3,0,1,0,0,0,0,0,4,0,0,0,0,0,1,0,3,1,4,
+                4,1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1,4,
+                4,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,4,
+                4,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1,4,
+                4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,
+                4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,
+                
             ]
             // 0 - dots
             // 1 - wall
@@ -61,10 +57,6 @@ function startGame()  {
             //new var to check if key hasn't been pressed in last few milliseconds
 
             let keyTimer = 0
-
-            //function to increment timer
-
-            //function to force pacman to move in that direction nonstop
             
             function loopMovePacman(){
                 
@@ -100,7 +92,7 @@ function startGame()  {
 
             //create Characterss
             //draw pacman onto the board
-            let pacmanCurrentIndex = 518
+            let pacmanCurrentIndex = 325
             pixels[pacmanCurrentIndex].classList.add('pac-man')
             //get the coordinates of pacman on the grid with X and Y axis
             function getCoordinates(index) {
@@ -213,6 +205,7 @@ function startGame()  {
             powerPelletEaten()
             checkForGameOver()
             checkForWin()
+            pelletflashing()
             }
             document.addEventListener('keydown', movePacman)
             // document.getElementById("upBtn").addEventListener("click", pacmanUp)
@@ -224,6 +217,7 @@ function startGame()  {
             function pacDotEaten() {
             if (pixels[pacmanCurrentIndex].classList.contains('dot')) {
                 score++
+                dotsEaten++
                 nom1.play()
                 scoreDisplay.innerHTML = score
                 pixels[pacmanCurrentIndex].classList.remove('dot')
@@ -261,10 +255,10 @@ function startGame()  {
         
             //all my ghosts
             ghosts = [
-            new Ghost('blinky', 349, 300),
-            new Ghost('pinky', 377, 670),
-            new Ghost('inky', 350, 450),
-            new Ghost('clyde', 378, 500)
+            new Ghost('blinky', 199, 300),
+            new Ghost('pinky', 199, 670),
+            new Ghost('inky', 199, 450),
+            new Ghost('clyde', 199, 500)
             ]
         
             //draw my ghosts onto the grid
@@ -330,6 +324,7 @@ function startGame()  {
                 }
                 }
             checkForGameOver()
+            checkForWin()
             }, ghost.speed)
             }
         
@@ -347,10 +342,11 @@ function startGame()  {
         
             //check for a win - more is when this score is reached
             function checkForWin() {
-            if (score === 274) {
+            if (dotsEaten >= 146) {
                 ghosts.forEach(ghost => clearInterval(ghost.timerId))
                 document.removeEventListener('keydown', movePacman)
-                setTimeout(function(){ alert("You have WON!"); }, 500)
+                setTimeout(function(){ alert('New Highscore!!: ' + score); }, 500)
+                setTimeout(function(){window.location.reload()},4000)
             }
             }
         }
