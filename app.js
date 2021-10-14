@@ -9,38 +9,41 @@ function startGame()  {
             gameAlreadyStarted = true
             const scoreDisplay = document.getElementById('score')
             const width = 21
+            const height = 21
+            const totalLocations = width*height
             let score = 0
             let dotsEaten = 0
             const grid = document.querySelector('.grid')
-            const layout = [
-                4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,
-                4,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,4,
-                4,1,3,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,3,1,4,
-                4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,
-                4,1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1,4,
-                4,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,4,
-                4,1,1,1,1,0,1,1,1,4,1,4,1,1,1,0,1,1,1,1,4,
-                4,4,4,4,1,0,1,4,4,4,4,4,4,4,1,0,1,4,4,4,4,
-                1,1,1,1,1,0,1,4,1,1,2,1,1,4,1,0,1,1,1,1,1,
-                4,4,4,4,4,0,4,4,1,4,2,4,1,4,4,0,4,4,4,4,4,
-                1,1,1,1,1,0,1,4,1,1,1,1,1,4,1,0,1,1,1,1,1,
-                4,4,4,4,1,0,1,4,4,4,4,4,4,4,1,0,1,4,4,4,4,
-                4,1,1,1,1,0,1,4,1,1,1,1,1,4,1,0,1,1,1,1,4,
-                4,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,4,
-                4,1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1,4,
-                4,1,3,0,1,0,0,0,0,0,4,0,0,0,0,0,1,0,3,1,4,
-                4,1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1,4,
-                4,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,4,
-                4,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1,4,
-                4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,
-                4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4,
+            const layout = []
+            // const layout = [
+            //     [4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4],
+            //     [4,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,4],
+            //     [4,1,3,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,3,1,4],
+            //     [4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4],
+            //     [4,1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1,4],
+            //     [4,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,4],
+            //     [4,1,1,1,1,0,1,1,1,4,1,4,1,1,1,0,1,1,1,1,4],
+            //     [4,4,4,4,1,0,1,4,4,4,4,4,4,4,1,0,1,4,4,4,4],
+            //     [1,1,1,1,1,0,1,4,1,1,2,1,1,4,1,0,1,1,1,1,1],
+            //     [4,4,4,4,4,0,4,4,1,4,2,4,1,4,4,0,4,4,4,4,4],
+            //     [1,1,1,1,1,0,1,4,1,1,1,1,1,4,1,0,1,1,1,1,1],
+            //     [4,4,4,4,1,0,1,4,4,4,4,4,4,4,1,0,1,4,4,4,4],
+            //     [4,1,1,1,1,0,1,4,1,1,1,1,1,4,1,0,1,1,1,1,4],
+            //     [4,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,4],
+            //     [4,1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1,4],
+            //     [4,1,3,0,1,0,0,0,0,0,4,0,0,0,0,0,1,0,3,1,4],
+            //     [4,1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1,4],
+            //     [4,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,4],
+            //     [4,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1,4],
+            //     [4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4],
+            //     [4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4],
                 
-            ]
+            // ]
             // 0 - dots
             // 1 - wall
             // 2 - ghost-lair
             // 3 - power-pellet
-            // 4 - empty
+            // 4 - empty=
 
             //add sounds
 
@@ -67,26 +70,229 @@ function startGame()  {
             }
         
             const pixels = []
-        
-            //create your board
-            function drawGame() {
-            for (let i = 0; i < layout.length; i++) {
-                const pixel = document.createElement('div')
-                grid.appendChild(pixel)
-                pixels.push(pixel)
-        
-                //add layout to the board
-                if(layout[i] === 0) {
-                pixels[i].classList.add('dot')
-                } else if (layout[i] === 1) {
-                pixels[i].classList.add('wall')
-                } else if (layout[i] === 2) {
-                pixels[i].classList.add('ghost-lair')
-                } else if (layout[i] === 3) {
-                pixels[i].classList.add('power-pellet')
+            numofDots = 146
+            
+            function mirrorPrefabHorizontally(prefab)
+            {
+                // todo
+                return prefab
+            }
+            
+            function mirrorPrefabVertically(prefab)
+            {
+                // todo
+                return prefab
+            }
+            
+            function drawPrefabOntoLayout(prefab, layout, offsetX, offsetY)
+            {
+                prefab.forEach(function(prefabRow, rowIndex)
+                {
+                    prefabRow.forEach(function(prefabCol, colIndex)
+                    {
+                        layout[rowIndex + offsetY][colIndex + offsetX] = prefabCol
+                    })
+                })
+            }
+
+            // 
+            function createLayout()
+            {
+                // Create initial walled layout
+                for (let i = 0; i < height; i++)
+                {
+                    let row = []
+                    
+                    for (let j = 0; j < width; j++)
+                    {
+                        // top and bottom walls
+                        if(i == 0 || i == height-1)
+                        {
+                            row.push(1)
+                        }
+                        // left and right walls
+                        else if (j == 0 || j == width-1)
+                        {
+                            row.push(1)
+                        }
+                        // space between walls
+                        else
+                        {
+                            row.push(0)
+                        }
+                    }
+                    
+                    layout.push(row)
                 }
+                //prefabricated layout, plan is to mirror them vertically or horizontally depending on which position in the map they will be place in
+                const prefab1 = [
+                        [1,1,1,1,1,1,1,1,1],
+                        [1,1,1,1,0,0,0,0,0],
+                        [1,1,1,1,0,1,1,1,0],
+                        [1,1,1,1,0,0,0,0,0],
+                        [1,1,1,1,3,1,1,1,1],
+                        [0,0,0,0,0,1,1,1,1],
+                        [0,1,1,1,0,1,1,1,1],
+                        [0,0,0,0,0,1,1,1,1],
+                        [1,1,1,1,1,1,1,1,1],
+                    ]
+                
+                const prefab2 = [
+                        [1,1,4,1,1,1,1,1,1],
+                        [1,1,4,1,1,0,0,0,0],
+                        [1,1,4,1,1,3,1,1,0],
+                        [1,1,4,0,0,0,0,0,0],
+                        [1,1,4,0,1,1,0,1,0],
+                        [4,3,4,0,1,1,0,0,0],
+                        [1,1,4,0,4,4,4,4,4],
+                        [1,1,4,1,1,1,1,1,1],
+                        [1,1,4,1,1,1,1,1,1],
+                    ]
+
+                const prefab3 = [
+                        [1,1,1,1,3,1,1,1,1],
+                        [1,1,1,1,4,1,1,1,1],
+                        [1,1,0,0,4,0,0,1,1],
+                        [1,1,0,1,4,1,0,1,1],
+                        [1,1,0,0,4,0,0,1,1],
+                        [1,1,0,1,4,1,0,1,1],
+                        [1,1,0,0,4,0,0,1,1],
+                        [1,1,1,1,4,1,1,1,1],
+                        [1,1,1,1,3,1,1,1,1],
+                    ]
+
+                const prefab4 = [
+                        [3,0,0,0,0,1,1,1,1],
+                        [0,1,0,1,0,1,1,1,1],
+                        [0,0,0,0,0,1,1,1,1],
+                        [0,1,1,1,4,1,1,1,1],
+                        [0,0,0,4,4,4,4,4,4],
+                        [1,1,4,1,1,4,1,1,1],
+                        [1,1,4,4,4,3,1,1,1],
+                        [1,1,1,1,4,1,1,1,1],
+                        [1,1,1,1,4,1,1,1,1],
+                    ]
+                
+                const prefabs = [prefab1, prefab2, prefab3, prefab4]
+                
+                // Place prefabs
+                const prefabWidth = (width - 3) / 2
+                const prefabHeight = (height - 3) / 2
+                // prefab slot positions are the offset of the top left corner of the prefab onto the map
+                const prefabSlot1XPos = 1
+                const prefabSlot1YPos = 1
+                const prefabSlot2XPos = Math.round(width / 2)
+                const prefabSlot2YPos = 1
+                const prefabSlot3XPos = 1
+                const prefabSlot3YPos = Math.round(height/2)
+                const prefabSlot4XPos = Math.round(width/2)
+                const prefabSlot4YPos = Math.round(height/2)
+                
+                
+                // Figure out what you want to do here
+                // Note: these functions don't do anything yet, but you can implement them later if you wish
+                mirrorPrefabHorizontally(prefab1)
+                mirrorPrefabVertically(prefab2)
+                
+                // Non random test
+                // drawPrefabOntoLayout(prefab1, layout, prefabSlot1XPos, prefabSlot1YPos);
+                // drawPrefabOntoLayout(prefab2, layout, prefabSlot2XPos, prefabSlot2YPos);
+                // drawPrefabOntoLayout(prefab3, layout, prefabSlot3XPos, prefabSlot3YPos);
+                // drawPrefabOntoLayout(prefab4, layout, prefabSlot4XPos, prefabSlot4YPos);
+                // Random test
+
+                const topPrefab = prefabs[Math.floor(Math.random()*4)]
+                const botPrefab = prefabs[Math.floor(Math.random()*4)]
+                drawPrefabOntoLayout(topPrefab, layout, prefabSlot1XPos, prefabSlot1YPos);
+                drawPrefabOntoLayout(topPrefab, layout, prefabSlot2XPos, prefabSlot2YPos);
+                drawPrefabOntoLayout(botPrefab, layout, prefabSlot3XPos, prefabSlot3YPos);
+                drawPrefabOntoLayout(botPrefab, layout, prefabSlot4XPos, prefabSlot4YPos);
+                
+                // Place interconnects
+                
+                
+                
+                
+                // Place lair
+                
+                
+                
+                
+                
+                
+                // layout[i] = 4
+                
+                //push top [411111111111111111114]
+                //push bottom [411111111111111111114]
+                
+                //at the end of generation, overrwrite location 179 and location 200
+                //if (i == 179 || i == 200){
+                //layout[i] = 2 
+                //}
+
+                
+                
+                // Other stuff
+                
+                
+                // Dots
+                // while num of dots to put in level is larger than 0
+                    // find a random spot that is an empty space, and turn it into a dot
+                    // num of dots to put in level -= 1
             }
-            }
+            //creates a random layout
+            createLayout()
+
+            //create your board
+            
+            function drawGame(){
+                
+                let i = 0;
+                
+                layout.forEach(function(layoutRow, rowIndex)
+                {
+                    layoutRow.forEach(function(layoutCol, colIndex)
+                    {
+                        const pixel = document.createElement('div')
+                        grid.appendChild(pixel)
+                        pixels.push(pixel)
+                        
+                        if (layoutCol === 0) {
+                            pixels[i].classList.add('dot')
+                        }
+                        if (layoutCol === 1) {
+                            pixels[i].classList.add('wall')
+                        }
+                        if (layoutCol === 2) {
+                            pixels[i].classList.add('ghost-lair')
+                        }
+                        if (layoutCol === 3) {
+                            pixels[i].classList.add('power-pellet')
+                        }
+                        
+                        i++;
+                    })
+                })
+            } 
+            
+            // function drawGame() {
+            //     for (let i = 0; i < layout.length; i++) {
+            //         const pixel = document.createElement('div')
+            //         grid.appendChild(pixel)
+            //         pixels.push(pixel)
+                    
+            //         //add layout to the board
+            //         if(layout[i] === 0) {
+            //         pixels[i].classList.add('dot')
+            //         } else if (layout[i] === 1) {
+            //         pixels[i].classList.add('wall')
+            //         } else if (layout[i] === 2) {
+            //         pixels[i].classList.add('ghost-lair')
+            //         } else if (layout[i] === 3) {
+            //         pixels[i].classList.add('power-pellet')
+            //         }
+            //     }
+            // }
             drawGame()
         
 
