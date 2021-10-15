@@ -139,27 +139,27 @@ function startGame()  {
             
                 //prefabricated layout, plan is to mirror them vertically or horizontally depending on which position in the map they will be place in
                 const prefab1 = [
-                        [1,3,0,0,0,0,0,0,0],
-                        [1,0,1,1,0,1,1,1,0],
-                        [1,0,0,0,3,0,0,0,0],
-                        [1,0,1,1,0,1,0,1,0],
-                        [0,0,0,0,0,1,0,0,0],
-                        [1,1,1,1,4,1,1,1,0],
-                        [1,1,1,1,4,1,4,4,4],
-                        [1,1,1,1,4,1,4,1,1],
-                        [1,1,1,1,4,1,4,1,1],
+                        [0,0,0,0,0,0,0,0,0],
+                        [0,1,1,0,1,0,1,1,0],
+                        [0,1,1,0,1,0,1,1,0],
+                        [0,0,0,3,1,0,0,0,0],
+                        [0,1,1,1,1,1,1,1,0],
+                        [0,0,0,0,1,1,1,1,1],
+                        [0,1,1,0,1,3,4,4,4],
+                        [0,1,1,0,1,0,1,1,1],
+                        [0,0,0,0,0,0,1,1,1],
                     ]
                 
                 const prefab2 = [
-                        [3,0,0,0,0,1,1,0,0],
-                        [0,1,1,1,0,1,1,0,1],
-                        [0,0,0,1,0,0,0,0,1],
-                        [0,1,0,1,0,1,0,1,1],
-                        [0,0,3,1,4,4,4,4,4],
-                        [0,1,1,1,4,1,1,1,1],
-                        [0,0,0,0,4,1,4,4,4],
-                        [1,1,1,1,4,1,4,1,1],
-                        [1,1,1,1,4,1,4,1,4],
+                        [1,1,1,1,1,1,1,1,1],
+                        [1,0,0,0,0,0,0,0,0],
+                        [1,3,1,1,0,1,1,1,0],
+                        [1,0,0,0,0,0,0,1,0],
+                        [1,0,1,1,0,1,0,0,0],
+                        [1,0,0,0,0,1,0,1,1],
+                        [1,1,1,1,0,1,0,1,4],
+                        [1,1,1,1,0,1,1,1,1],
+                        [1,1,1,1,0,1,1,1,1],
                     ]
 
                 const prefab3 = [
@@ -168,8 +168,8 @@ function startGame()  {
                         [0,1,1,0,1,0,1,1,0],
                         [0,0,0,3,1,0,0,0,0],
                         [0,1,1,1,1,1,1,1,0],
-                        [0,0,0,0,1,3,0,0,0],
-                        [0,1,1,0,1,0,1,1,1],
+                        [0,0,0,0,1,1,1,1,1],
+                        [0,1,1,0,1,3,4,4,4],
                         [0,1,1,0,1,0,1,1,1],
                         [0,0,0,0,0,0,1,1,1],
                     ]
@@ -180,9 +180,9 @@ function startGame()  {
                         [0,1,0,0,0,1,0,1,0],
                         [0,1,1,1,3,0,0,0,0],
                         [0,1,4,1,1,1,1,1,0],
-                        [0,1,1,1,3,0,0,0,1],
-                        [0,0,0,0,0,1,1,0,1],
-                        [1,0,1,0,0,0,0,0,1],
+                        [0,1,1,1,1,1,1,1,1],
+                        [0,0,0,0,0,0,0,0,1],
+                        [1,0,1,1,0,1,1,1,1],
                         [1,0,0,0,0,1,1,1,1],
                     ]
                 
@@ -535,10 +535,17 @@ function startGame()  {
             //loops through the ghost object and runs the move ghost function, 
             //for each specific ghost, the interval set determines how quickly they will be redrawn onto the map
             ghosts.forEach(ghost => moveGhost(ghost))
+            
+            function canGhostMoveInDirection(ghost, direction)
+            {
+                return !pixels[ghost.currentIndex + direction].classList.contains('ghost') &&
+                       !pixels[ghost.currentIndex + direction].classList.contains('wall') && 
+                       !pixels[ghost.currentIndex + direction].classList.contains('ghost-lair')
+            }
         
             function moveGhost(ghost) {
-                ghost.timerId = setInterval(function() {
-                    
+                ghost.timerId = setInterval(function()
+                {
                     //if direction isn't set yet, give it a random direction
                     if(ghost.direction == 0)
                     {
@@ -562,11 +569,7 @@ function startGame()  {
                     }
                     
                     //if the ghosts is currently moving in a direction and the next space is free, keep moving in that direction
-                    if (
-                        !pixels[ghost.currentIndex + ghost.direction].classList.contains('ghost') &&
-                        !pixels[ghost.currentIndex + ghost.direction].classList.contains('wall') && 
-                        !pixels[ghost.currentIndex + ghost.direction].classList.contains('ghost-lair')
-                        )
+                    if (canGhostMoveInDirection(ghost, ghost.direction))
                     {
                         //stop drawing the ghost in the old position
                         pixels[ghost.currentIndex].classList.remove(ghost.className)
@@ -581,25 +584,41 @@ function startGame()  {
                     }
 
                     //if the ghost has to pick a new direction, try to move towards the player, but try not to move backwards
-                    else if(getRow(pacmanCurrentIndex) > getRow(ghost.currentIndex) && ghost.lastDirection != directions[2])
+                    else if(
+                        getRow(pacmanCurrentIndex) > getRow(ghost.currentIndex) &&
+                        ghost.lastDirection != directions[2] &&
+                        canGhostMoveInDirection(ghost, directions[2])
+                    )
                     {
                         console.log(`${ghost.className} is moving down`)
                         ghost.lastDirection = ghost.direction
                         ghost.direction = directions[2]
                     }
-                    else if(getRow(pacmanCurrentIndex) < getRow(ghost.currentIndex) && ghost.lastDirection != directions[3])
+                    else if(
+                        getRow(pacmanCurrentIndex) < getRow(ghost.currentIndex) &&
+                        ghost.lastDirection != directions[3] &&
+                        canGhostMoveInDirection(ghost, directions[3])
+                    )
                     {
                         console.log(`${ghost.className} is moving up`)
                         ghost.lastDirection = ghost.direction
                         ghost.direction = directions[3]
                     }
-                    else if(getColumn(pacmanCurrentIndex) > getColumn(ghost.currentIndex) && ghost.lastDirection != directions[1])
+                    else if(
+                        getColumn(pacmanCurrentIndex) > getColumn(ghost.currentIndex) &&
+                        ghost.lastDirection != directions[1] &&
+                        canGhostMoveInDirection(ghost, directions[1])
+                    )
                     {
                         console.log(`${ghost.className} is moving right`)
                         ghost.lastDirection = ghost.direction
                         ghost.direction = directions[1]
                     }
-                    else if(getColumn(pacmanCurrentIndex) < getColumn(ghost.currentIndex) && ghost.lastDirection != directions[0])
+                    else if(
+                        getColumn(pacmanCurrentIndex) < getColumn(ghost.currentIndex) &&
+                        ghost.lastDirection != directions[0] &&
+                        canGhostMoveInDirection(ghost, directions[0])
+                    )
                     {
                         console.log(`${ghost.className} is moving left`)
                         ghost.lastDirection = ghost.direction
@@ -607,10 +626,17 @@ function startGame()  {
                     }
                     else
                     {
-                        console.log(`${ghost.className} is moving randomly`)
+                        console.log(`${ghost.className} is forced to move randomly`)
                         ghost.lastDirection = ghost.direction
                         ghost.direction = 0 // will be set to random on next loop
                     }
+                    
+                    // if(Math.floor(Math.random() * 5) < 1)
+                    // {
+                    //     console.log(`${ghost.className} has randomly decided to move randomly`)
+                    //     ghost.lastDirection = ghost.direction
+                    //     ghost.direction = 0 // will be set to random on next loop
+                    // }
                     
                     //debugging ghost movement
                     // console.log({
